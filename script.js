@@ -1,11 +1,16 @@
-// On page load
+// On load
 window.onload = function () {
     checkDailyReset();
     loadTasks();
     updateGoalStatus();
 };
 
-// Add Task
+// Toggle menu
+function toggleMenu() {
+    document.getElementById("sideMenu").classList.toggle("active");
+}
+
+// Add task
 function addTask() {
     let input = document.getElementById("taskInput");
     let task = input.value;
@@ -22,36 +27,31 @@ function addTask() {
     input.value = "";
 }
 
-// Create Task
+// Create task
 function createTaskElement(taskText, isCompleted) {
     let li = document.createElement("li");
 
     let span = document.createElement("span");
     span.textContent = taskText;
 
-    if (isCompleted) {
-        li.classList.add("completed");
-    }
+    if (isCompleted) li.classList.add("completed");
 
-    // Toggle complete
     span.onclick = function () {
         li.classList.toggle("completed");
         saveTasks();
         updateGoalStatus();
     };
 
-    // Edit
     let editBtn = document.createElement("button");
     editBtn.textContent = "Edit";
     editBtn.onclick = function () {
         let newTask = prompt("Edit your task:", span.textContent);
-        if (newTask !== null && newTask !== "") {
+        if (newTask) {
             span.textContent = newTask;
             saveTasks();
         }
     };
 
-    // Delete
     let deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
     deleteBtn.onclick = function () {
@@ -67,51 +67,39 @@ function createTaskElement(taskText, isCompleted) {
     document.getElementById("taskList").appendChild(li);
 }
 
-// Save tasks
+// Save
 function saveTasks() {
     let tasks = [];
-    let listItems = document.querySelectorAll("#taskList li");
-
-    listItems.forEach(function (li) {
-        let text = li.querySelector("span").textContent;
-        let completed = li.classList.contains("completed");
-
-        tasks.push({ text: text, completed: completed });
+    document.querySelectorAll("#taskList li").forEach(li => {
+        tasks.push({
+            text: li.querySelector("span").textContent,
+            completed: li.classList.contains("completed")
+        });
     });
-
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Load tasks
+// Load
 function loadTasks() {
     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-    tasks.forEach(function (task) {
-        createTaskElement(task.text, task.completed);
-    });
+    tasks.forEach(task => createTaskElement(task.text, task.completed));
 }
 
-// Enter key support
+// Enter key
 document.getElementById("taskInput").addEventListener("keypress", function(e) {
-    if (e.key === "Enter") {
-        addTask();
-    }
+    if (e.key === "Enter") addTask();
 });
 
-// Set goal
+// Goal
 function setGoal() {
     let goal = document.getElementById("goalInput").value;
-
-    if (goal === "" || goal <= 0) {
-        alert("Enter a valid goal!");
-        return;
-    }
+    if (goal <= 0) return alert("Enter valid goal");
 
     localStorage.setItem("dailyGoal", goal);
     updateGoalStatus();
 }
 
-// Update goal + progress bar
+// Update goal
 function updateGoalStatus() {
     let goal = localStorage.getItem("dailyGoal");
 
@@ -121,13 +109,13 @@ function updateGoalStatus() {
         return;
     }
 
-    let completedTasks = document.querySelectorAll(".completed").length;
+    let completed = document.querySelectorAll(".completed").length;
 
     document.getElementById("goalStatus").textContent =
-        `Progress: ${completedTasks} / ${goal}`;
+        `Progress: ${completed} / ${goal}`;
 
-    let percent = (completedTasks / goal) * 100;
-    document.getElementById("progressBar").style.width = percent + "%";
+    document.getElementById("progressBar").style.width =
+        (completed / goal) * 100 + "%";
 }
 
 // Daily reset
@@ -136,8 +124,30 @@ function checkDailyReset() {
     let lastDate = localStorage.getItem("lastDate");
 
     if (lastDate !== today) {
-        localStorage.removeItem("tasks");
-        localStorage.removeItem("dailyGoal");
+        localStorage.clear();
         localStorage.setItem("lastDate", today);
     }
+}
+
+// PWA install
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById("installBtn").style.display = "block";
+});
+
+document.getElementById("installBtn").addEventListener("click", () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+            deferredPrompt = null;
+        });
+    }
+});
+
+// Service worker
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
 }
