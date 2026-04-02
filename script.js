@@ -1,8 +1,10 @@
 // Load tasks when page opens
 window.onload = function () {
     loadTasks();
+    updateGoalStatus();
 };
 
+// Add Task
 function addTask() {
     let input = document.getElementById("taskInput");
     let task = input.value;
@@ -14,11 +16,12 @@ function addTask() {
 
     createTaskElement(task, false);
     saveTasks();
+    updateGoalStatus();
 
     input.value = "";
 }
 
-// Create task UI
+// Create Task Element
 function createTaskElement(taskText, isCompleted) {
     let li = document.createElement("li");
 
@@ -33,9 +36,10 @@ function createTaskElement(taskText, isCompleted) {
     span.onclick = function () {
         li.classList.toggle("completed");
         saveTasks();
+        updateGoalStatus();
     };
 
-    // EDIT button
+    // Edit button
     let editBtn = document.createElement("button");
     editBtn.textContent = "Edit";
     editBtn.onclick = function () {
@@ -46,12 +50,13 @@ function createTaskElement(taskText, isCompleted) {
         }
     };
 
-    // DELETE button
+    // Delete button
     let deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
     deleteBtn.onclick = function () {
         li.remove();
         saveTasks();
+        updateGoalStatus();
     };
 
     li.appendChild(span);
@@ -60,7 +65,6 @@ function createTaskElement(taskText, isCompleted) {
 
     document.getElementById("taskList").appendChild(li);
 }
-
 
 // Save tasks to localStorage
 function saveTasks() {
@@ -85,8 +89,38 @@ function loadTasks() {
         createTaskElement(task.text, task.completed);
     });
 }
+
+// ENTER key support
 document.getElementById("taskInput").addEventListener("keypress", function(e) {
     if (e.key === "Enter") {
         addTask();
     }
 });
+
+// Set Daily Goal
+function setGoal() {
+    let goal = document.getElementById("goalInput").value;
+
+    if (goal === "" || goal <= 0) {
+        alert("Enter a valid goal!");
+        return;
+    }
+
+    localStorage.setItem("dailyGoal", goal);
+    updateGoalStatus();
+}
+
+// Update Goal Progress
+function updateGoalStatus() {
+    let goal = localStorage.getItem("dailyGoal");
+
+    if (!goal) {
+        document.getElementById("goalStatus").textContent = "No goal set";
+        return;
+    }
+
+    let completedTasks = document.querySelectorAll(".completed").length;
+
+    document.getElementById("goalStatus").textContent =
+        `Progress: ${completedTasks} / ${goal}`;
+}
