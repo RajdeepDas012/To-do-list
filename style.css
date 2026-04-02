@@ -56,3 +56,7 @@ li {
     text-decoration: line-through;
     color: gray;
 }
+#goalStatus {
+    margin-top: 10px;
+    font-weight: bold;
+}
