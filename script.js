@@ -8,7 +8,25 @@ function addTask() {
     }
 
     let li = document.createElement("li");
-    li.textContent = task;
+
+    // Task text
+    let span = document.createElement("span");
+    span.textContent = task;
+
+    // Complete task on click
+    span.onclick = function () {
+        li.classList.toggle("completed");
+    };
+
+    // Delete button
+    let deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.onclick = function () {
+        li.remove();
+    };
+
+    li.appendChild(span);
+    li.appendChild(deleteBtn);
 
     document.getElementById("taskList").appendChild(li);
 
