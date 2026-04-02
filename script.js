@@ -35,7 +35,18 @@ function createTaskElement(taskText, isCompleted) {
         saveTasks();
     };
 
-    // Delete button
+    // EDIT button
+    let editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.onclick = function () {
+        let newTask = prompt("Edit your task:", span.textContent);
+        if (newTask !== null && newTask !== "") {
+            span.textContent = newTask;
+            saveTasks();
+        }
+    };
+
+    // DELETE button
     let deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
     deleteBtn.onclick = function () {
@@ -44,10 +55,12 @@ function createTaskElement(taskText, isCompleted) {
     };
 
     li.appendChild(span);
+    li.appendChild(editBtn);
     li.appendChild(deleteBtn);
 
     document.getElementById("taskList").appendChild(li);
 }
+
 
 // Save tasks to localStorage
 function saveTasks() {
@@ -72,3 +85,8 @@ function loadTasks() {
         createTaskElement(task.text, task.completed);
     });
 }
+document.getElementById("taskInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        addTask();
+    }
+});
