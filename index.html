@@ -3,21 +3,34 @@
 <head>
     <title>To-Do App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- ☰ Hamburger Menu -->
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<!-- Side Menu -->
+<div id="sideMenu" class="side-menu">
+    <h3>Menu</h3>
+    <button id="installBtn" style="display:none;">📥 Install App</button>
+</div>
+
 <div class="container">
     <h1>My To-Do List</h1>
 
-    <!-- Goal Section -->
+    <!-- Goal -->
     <h3>Set Daily Goal</h3>
     <input type="number" id="goalInput" placeholder="Enter goal (e.g. 5)">
     <button onclick="setGoal()">Set Goal</button>
 
     <p id="goalStatus">No goal set</p>
 
-    <!-- Progress Bar -->
+    <!-- Progress -->
     <div class="progress-container">
         <div id="progressBar"></div>
     </div>
