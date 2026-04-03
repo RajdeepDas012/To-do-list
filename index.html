@@ -11,12 +11,19 @@
 </head>
 <body>
 
-<!-- ☰ Hamburger Menu -->
+<!-- ☰ Menu Button -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<!-- 🌙 Dark Mode Button -->
+<div class="dark-mode-btn" onclick="toggleDarkMode()">🌙</div>
 
 <!-- Side Menu -->
 <div id="sideMenu" class="side-menu">
+    <div class="close-btn" onclick="toggleMenu()">❌</div>
+
     <h3>Menu</h3>
+
+    <!-- Install Button -->
     <button id="installBtn" style="display:none;">📥 Install App</button>
 </div>
 
@@ -35,7 +42,7 @@
         <div id="progressBar"></div>
     </div>
 
-    <!-- Task Input -->
+    <!-- Task -->
     <input type="text" id="taskInput" placeholder="Enter a task">
     <button onclick="addTask()">Add</button>
 
