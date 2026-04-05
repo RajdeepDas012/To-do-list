@@ -36,6 +36,12 @@ function toggleDarkMode() {
     }
 }
 
+function downloadAPK() {
+    alert("APK will start downloading. After download, allow 'Install from unknown sources' to install.");
+
+    window.open("https://www.mediafire.com/file/3q2rtgw1hwt1fbb/To_Do_List.apk/file", "_blank");
+}
+
 // Add task
 function addTask() {
     let input = document.getElementById("taskInput");
