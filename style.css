@@ -27,6 +27,15 @@ body {
     z-index: 1000;
 }
 
+.downloadAPK {
+    position: fixed;
+    top: 15px;
+    right: 35px;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+    z-index: 1000;
+}
 /* Side menu */
 .side-menu {
     position: fixed;
