@@ -30,7 +30,7 @@ body {
 .downloadAPK {
     position: fixed;
     top: 15px;
-    right: 35px;
+    right: 45px;
     font-size: 22px;
     color: white;
     cursor: pointer;
